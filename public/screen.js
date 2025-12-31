@@ -1,9 +1,8 @@
 import { qs, renderQuestion, playDing } from "./shared.js";
 
-const session = new URLSearchParams(location.search).get("session") || "default";
-qs("#session").textContent = session;
+qs("#session").textContent = "default";
 
-const socket = io({ query: { session, role: "screen" } });
+const socket = io({ query: { role: "screen" } });
 
 const elStatus = qs("#status");
 const elPackTitle = qs("#packTitle");

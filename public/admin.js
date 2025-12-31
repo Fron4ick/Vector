@@ -1,31 +1,23 @@
 import { qs } from "./shared.js";
 
-const session = new URLSearchParams(location.search).get("session") || "default";
-qs("#session").textContent = session;
-qs("#screenLink").href = `/screen.html?session=${encodeURIComponent(session)}`;
+qs("#session").textContent = "default";
+qs("#screenLink").href = "/screen.html";
 
-const socket = io({ query: { session, role: "admin" } });
+const socket = io({ query: { role: "admin" } });
 
-let isAuthed = false;
 let latestState = null;
 let packsIndex = [];
 
-const elKey = qs("#key");
-const elAuth = qs("#auth");
-const elAuthStatus = qs("#authStatus");
+const elStatus = qs("#authStatus");
 
 const elPack = qs("#pack");
 const elNow = qs("#now");
 
 function setAuthStatus(t) {
-  elAuthStatus.textContent = t;
+  elStatus.textContent = t;
 }
 
 function adminAction(action) {
-  if (!isAuthed) {
-    setAuthStatus("нужно авторизоваться");
-    return;
-  }
   socket.emit("admin:action", { action }, (res) => {
     if (!res?.ok) setAuthStatus(`ошибка: ${res?.error || "unknown"}`);
   });
@@ -68,18 +60,7 @@ socket.on("state", (state) => {
   renderNow();
 });
 
-elAuth.addEventListener("click", () => {
-  const key = elKey.value.trim();
-  socket.emit("admin:auth", { key }, (res) => {
-    if (res?.ok) {
-      isAuthed = true;
-      setAuthStatus("авторизован");
-    } else {
-      isAuthed = false;
-      setAuthStatus("неверный ключ");
-    }
-  });
-});
+setAuthStatus("готово");
 
 elPack.addEventListener("change", () => {
   adminAction({ type: "setPack", packId: elPack.value });
