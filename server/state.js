@@ -14,7 +14,15 @@ export function createInitialState({ packs }) {
     },
     ui: {
       phase: "idle",
-      reveal: "none"
+      reveal: "none",
+      timer: {
+        endsAt: null,
+        durationSec: null
+      },
+      fx: {
+        id: 0,
+        type: null
+      }
     },
     selection: {
       packId: initialPackId,
@@ -57,6 +65,8 @@ export function reduceAdminAction(prevState, action, { packs }) {
     state.selection.questionIndex = 0;
     state.ui.phase = "idle";
     state.ui.reveal = "none";
+    state.ui.timer.endsAt = null;
+    state.ui.timer.durationSec = null;
     return state;
   }
 
@@ -67,6 +77,8 @@ export function reduceAdminAction(prevState, action, { packs }) {
     state.selection.questionIndex = clampIndex(action.index, maxLen);
     state.ui.phase = "idle";
     state.ui.reveal = "none";
+    state.ui.timer.endsAt = null;
+    state.ui.timer.durationSec = null;
     return state;
   }
 
@@ -74,6 +86,8 @@ export function reduceAdminAction(prevState, action, { packs }) {
     state.selection.questionIndex = clampIndex(state.selection.questionIndex - 1, maxLen);
     state.ui.phase = "idle";
     state.ui.reveal = "none";
+    state.ui.timer.endsAt = null;
+    state.ui.timer.durationSec = null;
     return state;
   }
 
@@ -81,6 +95,8 @@ export function reduceAdminAction(prevState, action, { packs }) {
     state.selection.questionIndex = clampIndex(state.selection.questionIndex + 1, maxLen);
     state.ui.phase = "idle";
     state.ui.reveal = "none";
+    state.ui.timer.endsAt = null;
+    state.ui.timer.durationSec = null;
     return state;
   }
 
@@ -88,6 +104,31 @@ export function reduceAdminAction(prevState, action, { packs }) {
     state.ui.phase = "question";
     state.ui.reveal = "none";
     state.runtime.startedAt = Date.now();
+    return state;
+  }
+
+  if (action.type === "timerStart") {
+    const seconds = Number(action.seconds);
+    if (!Number.isFinite(seconds) || seconds <= 0 || seconds > 60 * 60) {
+      throw new Error("invalid_timer_seconds");
+    }
+    const now = Date.now();
+    state.ui.timer.durationSec = Math.trunc(seconds);
+    state.ui.timer.endsAt = now + Math.trunc(seconds) * 1000;
+    return state;
+  }
+
+  if (action.type === "timerStop") {
+    state.ui.timer.endsAt = null;
+    state.ui.timer.durationSec = null;
+    return state;
+  }
+
+  if (action.type === "fx") {
+    const type = String(action.fx || "");
+    if (!type) throw new Error("invalid_fx");
+    state.ui.fx.id = Number(state.ui.fx.id || 0) + 1;
+    state.ui.fx.type = type;
     return state;
   }
 
@@ -102,6 +143,8 @@ export function reduceAdminAction(prevState, action, { packs }) {
   if (action.type === "reset") {
     state.ui.phase = "idle";
     state.ui.reveal = "none";
+    state.ui.timer.endsAt = null;
+    state.ui.timer.durationSec = null;
     state.runtime.startedAt = null;
     return state;
   }

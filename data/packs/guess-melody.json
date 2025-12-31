@@ -4,6 +4,20 @@
   "type": "guess_melody",
   "questions": [
     {
+      "id": "ru_1956_five_minutes",
+      "title": "Угадай песню",
+      "year": 1956,
+      "artist": "Людмила Гурченко (к/ф «Карнавальная ночь»)",
+      "prompt": "Включите отрывок мелодии (файл добавите позже). Как называется песня?",
+      "hint": "До Нового года остаётся совсем чуть-чуть…",
+      "answer": "Пять минут",
+      "media": {
+        "audio": "/media/guess_melody/ru_1956_five_minutes.mp3",
+        "autoPlayOnAnswer": false,
+        "images": []
+      }
+    },
+    {
       "id": "ru_1973_zvenit",
       "title": "Угадай песню",
       "year": 1973,
@@ -12,7 +26,21 @@
       "hint": "Фраза из припева про январь…",
       "answer": "Звенит январская вьюга",
       "media": {
-        "audio": "",
+        "audio": "/media/guess_melody/ru_1973_zvenit_yanvarskaya_vyuga.mp3",
+        "autoPlayOnAnswer": false,
+        "images": []
+      }
+    },
+    {
+      "id": "ru_1982_three_white_horses",
+      "title": "Угадай песню",
+      "year": 1982,
+      "artist": "Лариса Долина (к/ф «Чародеи»)",
+      "prompt": "Включите отрывок мелодии (файл добавите позже). Как называется песня?",
+      "hint": "Их ровно три.",
+      "answer": "Три белых коня",
+      "media": {
+        "audio": "/media/guess_melody/ru_1982_tri_belyh_konya.mp3",
         "autoPlayOnAnswer": false,
         "images": []
       }
@@ -26,21 +54,21 @@
       "hint": "Очень часто включают на корпоративах.",
       "answer": "Новогодняя",
       "media": {
-        "audio": "",
+        "audio": "/media/guess_melody/ru_1999_diskoteka_avaria_novogodnyaya.mp3",
         "autoPlayOnAnswer": false,
         "images": []
       }
     },
     {
-      "id": "en_1984_last_christmas",
+      "id": "en_1980_abba_happy_new_year",
       "title": "Guess the song",
-      "year": 1984,
-      "artist": "Wham!",
+      "year": 1980,
+      "artist": "ABBA",
       "prompt": "Guess the song.",
-      "hint": "Last…",
-      "answer": "Last Christmas",
+      "hint": "Happy…",
+      "answer": "Happy New Year",
       "media": {
-        "audio": "",
+        "audio": "/media/guess_melody/en_1980_abba_happy_new_year.mp3",
         "autoPlayOnAnswer": false,
         "images": []
       }
