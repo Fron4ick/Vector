@@ -1,0 +1,49 @@
+{
+  "id": "guess_melody_ru_newyear",
+  "title": "Угадай мелодию — Новый год (RU)",
+  "type": "guess_melody",
+  "questions": [
+    {
+      "id": "ru_1973_zvenit",
+      "title": "Угадай песню",
+      "year": 1973,
+      "artist": "Нина Бродская (к/ф «Иван Васильевич меняет профессию»)",
+      "prompt": "Включите отрывок мелодии (файл добавите позже). Как называется песня?",
+      "hint": "Фраза из припева про январь…",
+      "answer": "Звенит январская вьюга",
+      "media": {
+        "audio": "",
+        "autoPlayOnAnswer": false,
+        "images": []
+      }
+    },
+    {
+      "id": "ru_1999_novogodnyaya",
+      "title": "Угадай песню",
+      "year": 1999,
+      "artist": "Дискотека Авария",
+      "prompt": "Угадайте по мелодии/подводке ведущего.",
+      "hint": "Очень часто включают на корпоративах.",
+      "answer": "Новогодняя",
+      "media": {
+        "audio": "",
+        "autoPlayOnAnswer": false,
+        "images": []
+      }
+    },
+    {
+      "id": "en_1984_last_christmas",
+      "title": "Guess the song",
+      "year": 1984,
+      "artist": "Wham!",
+      "prompt": "Guess the song.",
+      "hint": "Last…",
+      "answer": "Last Christmas",
+      "media": {
+        "audio": "",
+        "autoPlayOnAnswer": false,
+        "images": []
+      }
+    }
+  ]
+}
