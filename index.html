@@ -2,146 +2,53 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Новогодний Квиз 2025</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Interactive Cubes</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #1a2a6c; color: white; text-align: center; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); }
-        .round-card { cursor: pointer; background: #f39c12; margin: 10px; padding: 20px; border-radius: 10px; display: inline-block; width: 200px; transition: 0.3s; }
-        .round-card:hover { transform: scale(1.05); background: #e67e22; }
-        .hidden { display: none; }
-        .btn { background: #27ae60; border: none; padding: 10px 20px; color: white; border-radius: 5px; cursor: pointer; margin-top: 20px; }
-        .answer-box { margin-top: 15px; font-weight: bold; color: #2ecc71; font-size: 1.2em; }
-        .emoji-content { font-size: 3em; margin: 20px 0; }
-        .sinonim-text { font-style: italic; font-size: 1.3em; margin: 20px 0; }
-        img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow: hidden;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
+        
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
-
-<div class="container" id="app">
-    <h1>🎄 Новогодний Квиз 🎄</h1>
-    
-    <div id="menu">
-        <p>Выберите раунд:</p>
-        <div id="round-list"></div>
+    <div id="canvas-container"></div>
+    <div id="info">
+        <div>Кликните на куб или монету для взаимодействия</div>
+        <div id="active-cube-info">Активный куб: нет</div>
     </div>
-
-    <div id="game" class="hidden">
-        <h2 id="round-title"></h2>
-        <div id="question-container">
-            <div id="content-display"></div>
-            <audio id="audio-player" controls></audio>
-            <div id="answer-display" class="hidden">
-                <div class="answer-box" id="correct-answer"></div>
-                <div id="image-display"></div>
-            </div>
-        </div>
-        <button class="btn" id="show-answer-btn" onclick="showAnswer()">Показать ответ</button>
-        <button class="btn" id="next-btn" onclick="nextQuestion()">Далее</button>
-        <br>
-        <button class="btn" style="background:#c0392b" onclick="backToMenu()">В меню</button>
-    </div>
-</div>
-
-<script>
-    let currentRoundData = null;
-    let currentIndex = 0;
-
-    // 1. Загрузка конфигурации раундов
-    fetch('rounds_config.json')
-        .then(res => res.json())
-        .then(data => {
-            const list = document.getElementById('round-list');
-            data.forEach(round => {
-                const card = document.createElement('div');
-                card.className = 'round-card';
-                card.innerHTML = `<h3>${round.icon} ${round.title}</h3><p>${round.description}</p>`;
-                card.onclick = () => startRound(round.id);
-                list.appendChild(card);
-            });
-        });
-
-    // 2. Запуск раунда и загрузка соответствующего JSON
-    async function startRound(roundId) {
-        const fileName = roundId === 'melody' ? 'round1_melody.json' : 
-                         roundId === 'emoji' ? 'round2_emoji.json' : 'round3_sinonim.json';
-        
-        const res = await fetch(fileName);
-        currentRoundData = await res.json();
-        currentIndex = 0;
-        
-        document.getElementById('menu').classList.add('hidden');
-        document.getElementById('game').classList.remove('hidden');
-        document.getElementById('round-title').innerText = currentRoundData.title;
-        showQuestion();
-    }
-
-    // 3. Отображение вопроса
-    function showQuestion() {
-        const q = currentRoundData.questions[currentIndex];
-        const display = document.getElementById('content-display');
-        const audio = document.getElementById('audio-player');
-        
-        document.getElementById('answer-display').classList.add('hidden');
-        document.getElementById('show-answer-btn').classList.remove('hidden');
-        audio.pause(); // Останавливаем старую песню
-        display.innerHTML = '';
-        
-        // Отображаем текст или эмодзи
-        if (q.content) {
-            display.innerHTML = `<div class="emoji-content">${q.content}</div>`;
-        } else if (q.text) {
-            display.innerHTML = `<div class="sinonim-text">"${q.text}"</div>`;
-        }
-
-        // ЛОГИКА АУДИО:
-        // Если это раунд "Мелодии" (melody), включаем сразу
-        if (currentRoundData.type === "audio") {
-            audio.src = q.audio_a;
-            audio.classList.remove('hidden');
-            audio.play();
-        } else {
-            // В остальных раундах прячем плеер до нажатия кнопки "Ответ"
-            audio.classList.add('hidden');
-            audio.src = q.audio_a; 
-        }
-    }
-
-    function showAnswer() {
-        const q = currentRoundData.questions[currentIndex];
-        const audio = document.getElementById('audio-player');
-        
-        document.getElementById('correct-answer').innerText = q.answer;
-        
-        // Картинка (если есть в JSON)
-        const imgDisp = document.getElementById('image-display');
-        imgDisp.innerHTML = q.image ? `<img src="${q.image}">` : ''; 
-        
-        // ВКЛЮЧАЕМ МУЗЫКУ ДЛЯ 2 И 3 РАУНДА
-        if (currentRoundData.type !== "audio" && q.audio_a) {
-            audio.classList.remove('hidden');
-            audio.play();
-        }
-
-        document.getElementById('answer-display').classList.remove('hidden');
-        document.getElementById('show-answer-btn').classList.add('hidden');
-    }
     
-    function nextQuestion() {
-        currentIndex++;
-        if (currentIndex < currentRoundData.questions.length) {
-            showQuestion();
-        } else {
-            alert('Раунд окончен!');
-            backToMenu();
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
         }
     }
-
-    function backToMenu() {
-        document.getElementById('audio-player').pause();
-        document.getElementById('menu').classList.remove('hidden');
-        document.getElementById('game').classList.add('hidden');
-    }
-</script>
+    </script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
